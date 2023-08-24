@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.util.Scanner;
 
 public class ContaBanco {
 
@@ -8,13 +9,12 @@ public class ContaBanco {
     private String mensalidade;
     private BigDecimal saldo;
     private boolean status;
-    public BigDecimal valorSaque;
+    private BigDecimal valorSaque;
     private String[] cedulas = {"200","100","50","20","10","5","2","1","0.5","0.25","0.10","0.05","0.01"};
     public int[] saque = {0,0,0,0,0,0,0,0,0,0,0,0,0};
     public int[] notasDisponiveis = {2,2,3,3,2,2,3,3,2,2,3,3,2};
     private int numArray;
     private BigDecimal resultado;
-
 
     //SETTERS
     public void setDono(String dono) {
@@ -96,10 +96,27 @@ public class ContaBanco {
     }
 
     //Metodos especificos
+    private boolean dinheiroCaixa(){
+        BigDecimal somaNotas = new BigDecimal("0");
+        int contador;
+        for (contador=0;contador<=12;contador++){ //soma as notas existentes no cofre do caixa
+            somaNotas = somaNotas.add(new BigDecimal(cedulas[contador]).multiply(new BigDecimal(notasDisponiveis[contador])));
+        }
 
-    public BigDecimal sacarDinheiro(String v){
-        this.setValorSaque(new BigDecimal(v));//coloca o valor recebido no valor de saque
-        if (this.getSaldo().compareTo(this.getValorSaque()) >= 0) { //compara o valor de saque para retirar da conta
+        return (somaNotas.compareTo(getValorSaque()) > 0);//retorna a possibilidade de fazer o saque
+    }
+    public BigDecimal sacarDinheiro(){
+        System.out.print("Digite o valor do saque: ");
+        Scanner ler = new Scanner(System.in);
+        BigDecimal v ;
+        v = ler.nextBigDecimal();
+        this.setValorSaque(v);//coloca o valor recebido no valor de saque
+
+
+
+
+
+        if ((this.getSaldo().compareTo(this.getValorSaque()) >= 0) && (dinheiroCaixa())) { //compara o valor de saque para retirar da conta e se o caixa tem o dinheiro fisico para retirada de dinheiro
             for (numArray = 0; this.getValorSaque().compareTo(new BigDecimal("0")) > 0 && numArray <= 12;) {//soma no array
                 //divide o valor ate o numero ser < que zero
                 this.setResultado(this.getValorSaque().subtract(new BigDecimal(this.getCedulas(numArray))));//Retira o valor do valor inicial para contras as notas que seram devolvidas
@@ -114,19 +131,17 @@ public class ContaBanco {
                 }
             }
 
-            this.setSaldo(this.getSaldo().subtract(new BigDecimal(v)) );//Atualiza o valor do saldo
+            this.setSaldo(this.getSaldo().subtract(v) );//Atualiza o valor do saldo
 
             System.out.println("O valor do saldo da sua conta é " + getSaldo());
             int x;
             for(x=0;x < 13;x++){
-                System.out.println(getCedulas(x) + " : " +  getSaque(x));
+                if (getSaque(x) > 0){
+                    System.out.println(getCedulas(x) + " : " +  getSaque(x));
+                }
             }
-
-
         }
         return (saldo);
-
-
     }
     public void abrirConta(String m, String t, int n){
         setDono(m);
