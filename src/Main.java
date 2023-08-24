@@ -9,7 +9,7 @@ public class Main {
         c1.sacarDinheiro("600");
         //System.out.println("Seu novo saldo é " + c1.getSaldo());
         //System.out.println(c1.saque[12]);
-        c1.depositar("500");
+        c1.depositar("500  ");
         System.out.println(c1.getSaldo());
         c1.pagarMensalidade();
     }
