@@ -1,3 +1,7 @@
+import java.math.BigDecimal;
+
 public class Saque {
-    private
+    public Saque(BigDecimal ){
+
+    }
 }
